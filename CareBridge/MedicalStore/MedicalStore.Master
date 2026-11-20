@@ -1,0 +1,40 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MedicalStore.master.cs" Inherits="CareBridge.MedicalStore.MedicalStore" %>
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>CareBridge — Medical Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" runat="server" />
+    <link href="~/Content/Site.css" rel="stylesheet" runat="server" />
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="cb-shell">
+            <nav class="cb-sidebar">
+                <div class="cb-sidebar-brand">CareBridge</div>
+                <div class="cb-sidebar-role">Medical store</div>
+
+                <ul class="cb-sidebar-nav">
+                    <li><a href="~/MedicalStore/Dashboard.aspx" runat="server">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                        Dashboard</a></li>
+                    <li><a href="~/MedicalStore/Prescription_Queue.aspx" runat="server">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2h6v4H9z"/><path d="M9 6H5v16h14V6h-4M9 12h6M9 16h6"/></svg>
+                        Prescription Queue</a></li>
+                </ul>
+
+                <div class="cb-sidebar-logout">
+                    <a href="~/Logout.aspx" runat="server">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+                        Log out</a>
+                </div>
+            </nav>
+
+            <div class="cb-main">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

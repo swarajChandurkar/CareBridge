@@ -1,0 +1,48 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Doctor.master.cs" Inherits="CareBridge.Doctor.Doctor" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>CareBridge — Doctor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" runat="server" />
+    <link href="~/Content/Site.css" rel="stylesheet" runat="server" />
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="cb-shell">
+            <nav class="cb-sidebar">
+                <div class="cb-sidebar-brand">CareBridge</div>
+                <div class="cb-sidebar-role">Doctor panel</div>
+
+               <ul class="cb-sidebar-nav">
+    <li><a href="~/Doctor/Dashboard.aspx" runat="server">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Dashboard</a></li>
+    <li><a href="~/Doctor/SetAvailability.aspx" runat="server">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        Availability</a></li>
+    <li><a href="~/Doctor/Appointments.aspx" runat="server">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+        Appointments</a></li>
+</ul>
+
+<div class="cb-sidebar-logout">
+    <a href="~/Logout.aspx" runat="server">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Log out</a>
+</div>
+
+                <div class="cb-sidebar-logout">
+                    <a href="~/Logout.aspx" runat="server">Log out</a>
+                </div>
+            </nav>
+
+            <div class="cb-main">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

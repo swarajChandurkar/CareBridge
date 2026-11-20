@@ -1,0 +1,637 @@
+
+USE [CareBridge]
+GO
+/****** Object:  Table [dbo].[tbl_Appointment]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Appointment](
+	[AppointmentID] [int] IDENTITY(1,1) NOT NULL,
+	[PatientID] [int] NULL,
+	[DoctorID] [int] NULL,
+	[HospitalID] [int] NULL,
+	[AppointmentDate] [date] NULL,
+	[AppointmentTime] [varchar](20) NULL,
+	[Symptoms] [varchar](300) NULL,
+	[Status] [varchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[AppointmentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Bill]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Bill](
+	[BillID] [int] IDENTITY(1,1) NOT NULL,
+	[PrescriptionID] [int] NULL,
+	[PatientID] [int] NULL,
+	[StoreID] [int] NULL,
+	[TotalAmount] [decimal](10, 2) NULL,
+	[BillDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[BillID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_BillItem]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_BillItem](
+	[BillItemID] [int] IDENTITY(1,1) NOT NULL,
+	[BillID] [int] NULL,
+	[MedicineName] [varchar](100) NULL,
+	[Quantity] [int] NULL,
+	[Price] [decimal](10, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[BillItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Doctor]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Doctor](
+	[DoctorID] [int] IDENTITY(1,1) NOT NULL,
+	[LoginID] [int] NULL,
+	[HospitalID] [int] NULL,
+	[Name] [varchar](100) NULL,
+	[Specialization] [varchar](100) NULL,
+	[Contact] [varchar](15) NULL,
+	[Email] [varchar](100) NULL,
+	[AvailableDays] [varchar](50) NULL,
+	[AvailableTime] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[DoctorID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Hospital]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Hospital](
+	[HospitalID] [int] IDENTITY(1,1) NOT NULL,
+	[LoginID] [int] NULL,
+	[Name] [varchar](100) NULL,
+	[Address] [varchar](200) NULL,
+	[Contact] [varchar](15) NULL,
+	[Email] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[HospitalID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Lab]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Lab](
+	[LabID] [int] IDENTITY(1,1) NOT NULL,
+	[LoginID] [int] NULL,
+	[HospitalID] [int] NULL,
+	[Name] [varchar](100) NULL,
+	[Contact] [varchar](15) NULL,
+	[Address] [varchar](200) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[LabID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_LabReport]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_LabReport](
+	[ReportID] [int] IDENTITY(1,1) NOT NULL,
+	[RequestID] [int] NULL,
+	[ReportFilePath] [varchar](300) NULL,
+	[UploadDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ReportID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_LabTestRequest]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_LabTestRequest](
+	[RequestID] [int] IDENTITY(1,1) NOT NULL,
+	[AppointmentID] [int] NULL,
+	[PatientID] [int] NULL,
+	[DoctorID] [int] NULL,
+	[LabID] [int] NULL,
+	[TestName] [varchar](100) NULL,
+	[Status] [varchar](20) NULL,
+	[RequestDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RequestID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Login]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Login](
+	[LoginID] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [varchar](50) NOT NULL,
+	[Password] [varchar](50) NOT NULL,
+	[Role] [varchar](20) NOT NULL,
+	[CreatedDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[LoginID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_MedicalStore]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_MedicalStore](
+	[StoreID] [int] IDENTITY(1,1) NOT NULL,
+	[LoginID] [int] NULL,
+	[Name] [varchar](100) NULL,
+	[Contact] [varchar](15) NULL,
+	[Address] [varchar](200) NULL,
+	[HospitalID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[StoreID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Patient]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Patient](
+	[PatientID] [int] IDENTITY(1,1) NOT NULL,
+	[LoginID] [int] NULL,
+	[Name] [varchar](100) NULL,
+	[Contact] [varchar](15) NULL,
+	[Email] [varchar](100) NULL,
+	[Address] [varchar](200) NULL,
+	[DOB] [date] NULL,
+	[Gender] [varchar](10) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PatientID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Prescription]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Prescription](
+	[PrescriptionID] [int] IDENTITY(1,1) NOT NULL,
+	[AppointmentID] [int] NULL,
+	[PatientID] [int] NULL,
+	[DoctorID] [int] NULL,
+	[PrescriptionDate] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PrescriptionID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_PrescriptionItem]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_PrescriptionItem](
+	[ItemID] [int] IDENTITY(1,1) NOT NULL,
+	[PrescriptionID] [int] NULL,
+	[MedicineName] [varchar](100) NULL,
+	[Dosage] [varchar](50) NULL,
+	[Instructions] [varchar](200) NULL,
+	[Quantity] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ItemID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_Specialization]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_Specialization](
+	[SpecializationID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[SpecializationID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tbl_SymptomMapping]    Script Date: 26-09-2026 2:11:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbl_SymptomMapping](
+	[MappingID] [int] IDENTITY(1,1) NOT NULL,
+	[Symptom] [varchar](100) NULL,
+	[SpecializationID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MappingID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Appointment] ON 
+GO
+INSERT [dbo].[tbl_Appointment] ([AppointmentID], [PatientID], [DoctorID], [HospitalID], [AppointmentDate], [AppointmentTime], [Symptoms], [Status]) VALUES (1, 1, 1, 1, CAST(N'2026-09-04' AS Date), N'18:38', N'Fever, Cold, Cough', N'Confirmed')
+GO
+INSERT [dbo].[tbl_Appointment] ([AppointmentID], [PatientID], [DoctorID], [HospitalID], [AppointmentDate], [AppointmentTime], [Symptoms], [Status]) VALUES (2, 1, 2, 1, CAST(N'2026-09-26' AS Date), N'12:36', N'Fever, Chest pain', N'Completed')
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Appointment] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Bill] ON 
+GO
+INSERT [dbo].[tbl_Bill] ([BillID], [PrescriptionID], [PatientID], [StoreID], [TotalAmount], [BillDate]) VALUES (1, 1, 1, 1, CAST(30.00 AS Decimal(10, 2)), CAST(N'2026-09-22T17:25:39.803' AS DateTime))
+GO
+INSERT [dbo].[tbl_Bill] ([BillID], [PrescriptionID], [PatientID], [StoreID], [TotalAmount], [BillDate]) VALUES (2, 2, 1, 1, CAST(30.00 AS Decimal(10, 2)), CAST(N'2026-09-26T12:43:11.637' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Bill] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_BillItem] ON 
+GO
+INSERT [dbo].[tbl_BillItem] ([BillItemID], [BillID], [MedicineName], [Quantity], [Price]) VALUES (1, 1, N'parcitmol', 10, CAST(30.00 AS Decimal(10, 2)))
+GO
+INSERT [dbo].[tbl_BillItem] ([BillItemID], [BillID], [MedicineName], [Quantity], [Price]) VALUES (2, 2, N'parcitmol', 10, CAST(30.00 AS Decimal(10, 2)))
+GO
+SET IDENTITY_INSERT [dbo].[tbl_BillItem] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Doctor] ON 
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (1, 3, 1, N'Dr. Ravi Sharma', N'General Physician', N'9811111111', N'ravi.sharma@carebridge.com', N'Mon-Sat', N'9:00 AM - 5:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (2, 4, 1, N'Dr. Anjali Mehta', N'Cardiologist', N'9811111112', N'anjali.mehta@carebridge.com', N'Mon-Fri', N'10:00 AM - 4:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (3, 5, 1, N'Dr. Sameer Kapoor', N'Dermatologist', N'9811111113', N'sameer.kapoor@carebridge.com', N'Tue-Sat', N'11:00 AM - 3:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (4, 6, 1, N'Dr. Priya Nair', N'Orthopedic', N'9811111114', N'priya.nair@carebridge.com', N'Mon-Sat', N'9:00 AM - 1:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (5, 7, 1, N'Dr. Karthik Iyer', N'ENT Specialist', N'9811111115', N'karthik.iyer@carebridge.com', N'Mon-Fri', N'10:00 AM - 2:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (6, 8, 1, N'Dr. Neha Verma', N'Neurologist', N'9811111116', N'neha.verma@carebridge.com', N'Mon-Thu', N'9:00 AM - 12:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (7, 9, 1, N'Dr. Suresh Rao', N'Gastroenterologist', N'9811111117', N'suresh.rao@carebridge.com', N'Tue-Sat', N'10:00 AM - 4:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (8, 10, 1, N'Dr. Rohit Gupta', N'Pulmonologist', N'9811111118', N'rohit.gupta@carebridge.com', N'Mon-Fri', N'9:00 AM - 1:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (9, 11, 1, N'Dr. Kavita Desai', N'Ophthalmologist', N'9811111119', N'kavita.desai@carebridge.com', N'Mon-Sat', N'11:00 AM - 5:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (10, 12, 1, N'Dr. Amit Joshi', N'Dentist', N'9811111120', N'amit.joshi@carebridge.com', N'Mon-Sat', N'9:00 AM - 6:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (11, 13, 1, N'Dr. Lakshmi Reddy', N'Psychiatrist', N'9811111121', N'lakshmi.reddy@carebridge.com', N'Mon-Fri', N'2:00 PM - 6:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (12, 14, 1, N'Dr. Harpreet Singh', N'Urologist', N'9811111122', N'harpreet.singh@carebridge.com', N'Tue-Sat', N'10:00 AM - 3:00 PM')
+GO
+INSERT [dbo].[tbl_Doctor] ([DoctorID], [LoginID], [HospitalID], [Name], [Specialization], [Contact], [Email], [AvailableDays], [AvailableTime]) VALUES (13, 15, 1, N'Dr. Meera Pillai', N'Gynecologist', N'9811111123', N'meera.pillai@carebridge.com', N'Mon-Sat', N'10:00 AM - 2:00 PM')
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Doctor] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Hospital] ON 
+GO
+INSERT [dbo].[tbl_Hospital] ([HospitalID], [LoginID], [Name], [Address], [Contact], [Email]) VALUES (1, 2, N'City General Hospital', N'12 MG Road, Nagpur', N'9800000000', N'contact@citygeneral.com')
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Hospital] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Lab] ON 
+GO
+INSERT [dbo].[tbl_Lab] ([LabID], [LoginID], [HospitalID], [Name], [Contact], [Address]) VALUES (1, 16, 1, N'City Diagnostic', N'852368547', N'Rathi nagar,gade nagar amravati Maharashtra')
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Lab] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_LabReport] ON 
+GO
+INSERT [dbo].[tbl_LabReport] ([ReportID], [RequestID], [ReportFilePath], [UploadDate]) VALUES (1, 2, N'/UploadedReports/2_DeadStockRegister.pdf', CAST(N'2026-09-26T13:01:54.417' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[tbl_LabReport] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_LabTestRequest] ON 
+GO
+INSERT [dbo].[tbl_LabTestRequest] ([RequestID], [AppointmentID], [PatientID], [DoctorID], [LabID], [TestName], [Status], [RequestDate]) VALUES (2, 2, 1, 2, 1, N'blood test', N'Completed', CAST(N'2026-09-26T12:59:22.417' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[tbl_LabTestRequest] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Login] ON 
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (1, N'Roshan', N'1122', N'Patient', CAST(N'2026-09-01T12:52:12.780' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (2, N'citygeneral', N'hospital123', N'Hospital', CAST(N'2026-09-02T17:45:36.833' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (3, N'dr.sharma', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.840' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (4, N'dr.mehta', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.840' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (5, N'dr.kapoor', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.840' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (6, N'dr.nair', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.840' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (7, N'dr.iyer', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.840' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (8, N'dr.verma', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.840' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (9, N'dr.rao', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.843' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (10, N'dr.gupta', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.843' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (11, N'dr.desai', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.843' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (12, N'dr.joshi', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.843' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (13, N'dr.reddy', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.843' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (14, N'dr.singh', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.847' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (15, N'dr.pillai', N'doc123', N'Doctor', CAST(N'2026-09-02T17:45:36.847' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (16, N'CityLab', N'1122', N'Lab', CAST(N'2026-09-22T13:24:17.723' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (17, N'citymedical', N'1122', N'MedicalStore', CAST(N'2026-09-22T17:09:52.630' AS DateTime))
+GO
+INSERT [dbo].[tbl_Login] ([LoginID], [Username], [Password], [Role], [CreatedDate]) VALUES (18, N'swaraj@123', N'1234', N'Patient', CAST(N'2026-09-26T12:47:44.963' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Login] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_MedicalStore] ON 
+GO
+INSERT [dbo].[tbl_MedicalStore] ([StoreID], [LoginID], [Name], [Contact], [Address], [HospitalID]) VALUES (1, 17, N'City Medical', N'1023202548', N'Rathi nagar,gade nagar amravati Maharashtra', 1)
+GO
+SET IDENTITY_INSERT [dbo].[tbl_MedicalStore] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Patient] ON 
+GO
+INSERT [dbo].[tbl_Patient] ([PatientID], [LoginID], [Name], [Contact], [Email], [Address], [DOB], [Gender]) VALUES (1, 1, N'Roshan Shivdas Budh', N'8459002454', N'roshanbudh@gmail.com', N'Rathi nagar,gade', NULL, NULL)
+GO
+INSERT [dbo].[tbl_Patient] ([PatientID], [LoginID], [Name], [Contact], [Email], [Address], [DOB], [Gender]) VALUES (2, 18, N'swaraj chandurkar', N'1234567890', N'swar@gmail.com', N'Rathi nagar,gade nagar amravati Maharashtra', NULL, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Patient] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Prescription] ON 
+GO
+INSERT [dbo].[tbl_Prescription] ([PrescriptionID], [AppointmentID], [PatientID], [DoctorID], [PrescriptionDate]) VALUES (1, 1, 1, 1, CAST(N'2026-09-09T17:58:08.443' AS DateTime))
+GO
+INSERT [dbo].[tbl_Prescription] ([PrescriptionID], [AppointmentID], [PatientID], [DoctorID], [PrescriptionDate]) VALUES (2, 2, 1, 2, CAST(N'2026-09-26T12:41:26.667' AS DateTime))
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Prescription] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_PrescriptionItem] ON 
+GO
+INSERT [dbo].[tbl_PrescriptionItem] ([ItemID], [PrescriptionID], [MedicineName], [Dosage], [Instructions], [Quantity]) VALUES (1, 1, N'parcitmol', N'500mg', N'morning', 10)
+GO
+INSERT [dbo].[tbl_PrescriptionItem] ([ItemID], [PrescriptionID], [MedicineName], [Dosage], [Instructions], [Quantity]) VALUES (2, 2, N'parcitmol', N'500mg', N'morning', 10)
+GO
+SET IDENTITY_INSERT [dbo].[tbl_PrescriptionItem] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Specialization] ON 
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (6, N'General Physician')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (7, N'Cardiologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (8, N'Dermatologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (9, N'Orthopedic')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (10, N'ENT Specialist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (11, N'Neurologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (12, N'Gastroenterologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (13, N'Pulmonologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (14, N'Ophthalmologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (15, N'Dentist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (16, N'Psychiatrist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (17, N'Urologist')
+GO
+INSERT [dbo].[tbl_Specialization] ([SpecializationID], [Name]) VALUES (18, N'Gynecologist')
+GO
+SET IDENTITY_INSERT [dbo].[tbl_Specialization] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tbl_SymptomMapping] ON 
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (17, N'fever', 6)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (18, N'cold', 6)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (19, N'cough', 6)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (20, N'fatigue', 6)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (21, N'body ache', 6)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (22, N'chest pain', 7)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (23, N'palpitations', 7)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (24, N'breathlessness', 7)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (25, N'rash', 8)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (26, N'itching', 8)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (27, N'acne', 8)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (28, N'hair fall', 8)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (29, N'joint pain', 9)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (30, N'back pain', 9)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (31, N'muscle pain', 9)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (32, N'fracture', 9)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (33, N'ear pain', 10)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (34, N'sore throat', 10)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (35, N'sinus', 10)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (36, N'hearing loss', 10)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (37, N'headache', 11)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (38, N'migraine', 11)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (39, N'dizziness', 11)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (40, N'numbness', 11)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (41, N'stomach pain', 12)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (42, N'acidity', 12)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (43, N'vomiting', 12)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (44, N'diarrhea', 12)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (45, N'wheezing', 13)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (46, N'chronic cough', 13)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (47, N'eye pain', 14)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (48, N'blurred vision', 14)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (49, N'red eyes', 14)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (50, N'tooth pain', 15)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (51, N'gum bleeding', 15)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (52, N'anxiety', 16)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (53, N'insomnia', 16)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (54, N'frequent urination', 17)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (55, N'urinary pain', 17)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (56, N'excessive thirst', 17)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (57, N'irregular periods', 18)
+GO
+INSERT [dbo].[tbl_SymptomMapping] ([MappingID], [Symptom], [SpecializationID]) VALUES (58, N'pelvic pain', 18)
+GO
+SET IDENTITY_INSERT [dbo].[tbl_SymptomMapping] OFF
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__tbl_Logi__536C85E44236CA0C]    Script Date: 26-09-2026 2:11:34 PM ******/
+ALTER TABLE [dbo].[tbl_Login] ADD UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[tbl_Appointment] ADD  DEFAULT ('Pending') FOR [Status]
+GO
+ALTER TABLE [dbo].[tbl_Bill] ADD  DEFAULT (getdate()) FOR [BillDate]
+GO
+ALTER TABLE [dbo].[tbl_LabReport] ADD  DEFAULT (getdate()) FOR [UploadDate]
+GO
+ALTER TABLE [dbo].[tbl_LabTestRequest] ADD  DEFAULT ('Pending') FOR [Status]
+GO
+ALTER TABLE [dbo].[tbl_LabTestRequest] ADD  DEFAULT (getdate()) FOR [RequestDate]
+GO
+ALTER TABLE [dbo].[tbl_Login] ADD  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[tbl_Prescription] ADD  DEFAULT (getdate()) FOR [PrescriptionDate]
+GO
+ALTER TABLE [dbo].[tbl_Appointment]  WITH CHECK ADD FOREIGN KEY([DoctorID])
+REFERENCES [dbo].[tbl_Doctor] ([DoctorID])
+GO
+ALTER TABLE [dbo].[tbl_Appointment]  WITH CHECK ADD FOREIGN KEY([HospitalID])
+REFERENCES [dbo].[tbl_Hospital] ([HospitalID])
+GO
+ALTER TABLE [dbo].[tbl_Appointment]  WITH CHECK ADD FOREIGN KEY([PatientID])
+REFERENCES [dbo].[tbl_Patient] ([PatientID])
+GO
+ALTER TABLE [dbo].[tbl_Bill]  WITH CHECK ADD FOREIGN KEY([PatientID])
+REFERENCES [dbo].[tbl_Patient] ([PatientID])
+GO
+ALTER TABLE [dbo].[tbl_Bill]  WITH CHECK ADD FOREIGN KEY([PrescriptionID])
+REFERENCES [dbo].[tbl_Prescription] ([PrescriptionID])
+GO
+ALTER TABLE [dbo].[tbl_Bill]  WITH CHECK ADD FOREIGN KEY([StoreID])
+REFERENCES [dbo].[tbl_MedicalStore] ([StoreID])
+GO
+ALTER TABLE [dbo].[tbl_BillItem]  WITH CHECK ADD FOREIGN KEY([BillID])
+REFERENCES [dbo].[tbl_Bill] ([BillID])
+GO
+ALTER TABLE [dbo].[tbl_Doctor]  WITH CHECK ADD FOREIGN KEY([HospitalID])
+REFERENCES [dbo].[tbl_Hospital] ([HospitalID])
+GO
+ALTER TABLE [dbo].[tbl_Doctor]  WITH CHECK ADD FOREIGN KEY([LoginID])
+REFERENCES [dbo].[tbl_Login] ([LoginID])
+GO
+ALTER TABLE [dbo].[tbl_Hospital]  WITH CHECK ADD FOREIGN KEY([LoginID])
+REFERENCES [dbo].[tbl_Login] ([LoginID])
+GO
+ALTER TABLE [dbo].[tbl_Lab]  WITH CHECK ADD FOREIGN KEY([HospitalID])
+REFERENCES [dbo].[tbl_Hospital] ([HospitalID])
+GO
+ALTER TABLE [dbo].[tbl_Lab]  WITH CHECK ADD FOREIGN KEY([LoginID])
+REFERENCES [dbo].[tbl_Login] ([LoginID])
+GO
+ALTER TABLE [dbo].[tbl_LabReport]  WITH CHECK ADD FOREIGN KEY([RequestID])
+REFERENCES [dbo].[tbl_LabTestRequest] ([RequestID])
+GO
+ALTER TABLE [dbo].[tbl_LabTestRequest]  WITH CHECK ADD FOREIGN KEY([AppointmentID])
+REFERENCES [dbo].[tbl_Appointment] ([AppointmentID])
+GO
+ALTER TABLE [dbo].[tbl_LabTestRequest]  WITH CHECK ADD FOREIGN KEY([DoctorID])
+REFERENCES [dbo].[tbl_Doctor] ([DoctorID])
+GO
+ALTER TABLE [dbo].[tbl_LabTestRequest]  WITH CHECK ADD FOREIGN KEY([LabID])
+REFERENCES [dbo].[tbl_Lab] ([LabID])
+GO
+ALTER TABLE [dbo].[tbl_LabTestRequest]  WITH CHECK ADD FOREIGN KEY([PatientID])
+REFERENCES [dbo].[tbl_Patient] ([PatientID])
+GO
+ALTER TABLE [dbo].[tbl_MedicalStore]  WITH CHECK ADD FOREIGN KEY([HospitalID])
+REFERENCES [dbo].[tbl_Hospital] ([HospitalID])
+GO
+ALTER TABLE [dbo].[tbl_MedicalStore]  WITH CHECK ADD FOREIGN KEY([LoginID])
+REFERENCES [dbo].[tbl_Login] ([LoginID])
+GO
+ALTER TABLE [dbo].[tbl_Patient]  WITH CHECK ADD FOREIGN KEY([LoginID])
+REFERENCES [dbo].[tbl_Login] ([LoginID])
+GO
+ALTER TABLE [dbo].[tbl_Prescription]  WITH CHECK ADD FOREIGN KEY([AppointmentID])
+REFERENCES [dbo].[tbl_Appointment] ([AppointmentID])
+GO
+ALTER TABLE [dbo].[tbl_Prescription]  WITH CHECK ADD FOREIGN KEY([DoctorID])
+REFERENCES [dbo].[tbl_Doctor] ([DoctorID])
+GO
+ALTER TABLE [dbo].[tbl_Prescription]  WITH CHECK ADD FOREIGN KEY([PatientID])
+REFERENCES [dbo].[tbl_Patient] ([PatientID])
+GO
+ALTER TABLE [dbo].[tbl_PrescriptionItem]  WITH CHECK ADD FOREIGN KEY([PrescriptionID])
+REFERENCES [dbo].[tbl_Prescription] ([PrescriptionID])
+GO
+ALTER TABLE [dbo].[tbl_SymptomMapping]  WITH CHECK ADD FOREIGN KEY([SpecializationID])
+REFERENCES [dbo].[tbl_Specialization] ([SpecializationID])
+GO
+USE [master]
+GO
+ALTER DATABASE [CareBridge] SET  READ_WRITE 
+GO

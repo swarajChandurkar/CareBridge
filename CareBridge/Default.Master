@@ -1,0 +1,34 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Default.master.cs" Inherits="CareBridge.DefaultMaster" %>
+
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>CareBridge — Unified Healthcare Services</title>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" runat="server" />
+    <link href="Content/Site.css" rel="stylesheet" runat="server" />
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="cb-topstrip">Connecting patients, hospitals, doctors, labs and medical stores — all in one place</div>
+        <nav class="cb-navbar">
+            <div class="container d-flex justify-content-between align-items-center">
+                <a class="navbar-brand" href="~/Default.aspx" runat="server">Care<span>Bridge</span></a>
+                <div>
+                    <a class="nav-link d-inline" href="~/About.aspx" runat="server">About</a>
+                    <a class="btn-cb-outline d-inline" href="~/Login.aspx" runat="server">Log in</a>
+                    <a class="btn-cb-filled d-inline" href="~/Register.aspx" runat="server">Register</a>
+                </div>
+            </div>
+        </nav>
+
+        <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+
+        <footer class="cb-footer">
+            CareBridge — connecting patients, hospitals, doctors, labs and medical stores in one place.
+        </footer>
+    </form>
+</body>
+</html>
