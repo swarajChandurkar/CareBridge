@@ -1,0 +1,11 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/patient", "destination": "/portal.html?role=patient" },
+    { "source": "/doctor", "destination": "/portal.html?role=doctor" },
+    { "source": "/lab", "destination": "/portal.html?role=lab" },
+    { "source": "/medical-store", "destination": "/portal.html?role=medicalstore" },
+    { "source": "/admin", "destination": "/portal.html?role=admin" }
+  ]
+}

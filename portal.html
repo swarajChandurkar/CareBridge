@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareBridge — Unified Healthcare Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #12AEC4;
+            --color-primary-dark: #0C93A6;
+            --color-primary-light: #E7F7F9;
+            --color-bg: #F4F7F9;
+            --color-surface: #FFFFFF;
+            --color-text: #263238;
+            --color-muted: #7C8D96;
+            --color-border: #E3EBEE;
+            --shadow-sm: 0 2px 8px rgba(18, 174, 196, 0.08);
+            --shadow-md: 0 8px 24px rgba(18, 174, 196, 0.12);
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); margin: 0; padding-bottom: 60px; }
+        h1, h2, h3, h4, .nav-brand { font-family: 'Poppins', sans-serif; }
+        
+        /* Top Navigation with Role Switcher */
+        .cb-master-bar { background: #fff; border-bottom: 1px solid var(--color-border); padding: 12px 24px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow-sm); }
+        .role-pill { padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; border: 1.5px solid var(--color-border); background: #fff; color: var(--color-text); margin-right: 6px; cursor: pointer; transition: 0.15s; }
+        .role-pill:hover { border-color: var(--color-primary); background: var(--color-primary-light); color: var(--color-primary-dark); }
+        .role-pill.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+        
+        .cb-container { max-width: 1140px; margin: 30px auto; padding: 0 16px; }
+        .cb-portal-view { display: none; }
+        .cb-portal-view.active { display: block; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Card components */
+        .cb-card { background: #fff; border-radius: 14px; border: 1px solid var(--color-border); padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
+        .cb-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--color-border); padding-bottom: 12px; }
+        .cb-card-header h3 { font-size: 1.25rem; font-weight: 700; margin: 0; }
+        
+        /* Badges */
+        .badge-pending { background: #FEF3C7; color: #B45309; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+        .badge-confirmed { background: #DBEAFE; color: #1D4ED8; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+        .badge-inprogress { background: #E0E7FF; color: #4338CA; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+        .badge-completed { background: #D1FAE5; color: #047857; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.78rem; }
+
+        /* Symptom Chips */
+        .symptom-grid { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 20px; }
+        .symptom-chip { border: 1.5px solid var(--color-border); border-radius: 20px; padding: 7px 14px; background: #fff; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.15s; }
+        .symptom-chip:hover { border-color: var(--color-primary); }
+        .symptom-chip.selected { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+
+        /* Tables */
+        .cb-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        .cb-table th { background: var(--color-primary-light); color: var(--color-primary-dark); font-weight: 700; padding: 12px; border-bottom: 2px solid var(--color-border); text-align: left; }
+        .cb-table td { padding: 12px; border-bottom: 1px solid var(--color-border); vertical-align: middle; }
+        .cb-table tr:hover td { background: #F8FCFD; }
+
+        .btn-sm-action { padding: 5px 12px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; text-decoration: none; border: none; cursor: pointer; display: inline-block; }
+        .btn-sm-primary { background: var(--color-primary); color: #fff; }
+        .btn-sm-primary:hover { background: var(--color-primary-dark); color: #fff; }
+        .btn-sm-outline { border: 1px solid var(--color-primary); color: var(--color-primary); background: #fff; }
+        .btn-sm-outline:hover { background: var(--color-primary-light); }
+        
+        /* Thermal Receipt Invoice */
+        .thermal-receipt { max-width: 380px; margin: 0 auto; background: #FFFDF9; border: 1px dashed #7C8D96; padding: 24px; font-family: 'Courier New', monospace; font-size: 0.88rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Master Bar with Role Switcher -->
+    <div class="cb-master-bar d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="d-flex align-items-center gap-3">
+            <a href="index.html" style="font-weight: 800; font-size: 1.35rem; color: #263238; text-decoration: none;">Care<span style="color:var(--color-primary);">Bridge</span></a>
+            <span class="d-none d-md-inline" style="color: var(--color-muted); font-size: 0.82rem;">| Role-Segregated Portals:</span>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <button class="role-pill active" onclick="switchRole('patient')">👤 Patient</button>
+            <button class="role-pill" onclick="switchRole('doctor')">👨‍⚕️ Doctor</button>
+            <button class="role-pill" onclick="switchRole('lab')">🔬 Lab</button>
+            <button class="role-pill" onclick="switchRole('medicalstore')">💊 Medical Store</button>
+            <button class="role-pill" onclick="switchRole('admin')">🏥 Hospital Admin</button>
+        </div>
+
+        <div>
+            <button class="btn btn-outline-secondary btn-sm" onclick="resetDemo()" style="font-size: 0.75rem; border-radius: 20px;">↺ Reset Demo State</button>
+        </div>
+    </div>
+
+    <div class="cb-container">
+
+        <!-- ================= PATIENT PORTAL ================= -->
+        <div id="view-patient" class="cb-portal-view active">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2>Patient Portal</h2>
+                    <p style="color: var(--color-muted); margin: 0;">Welcome, <strong>Swaraj Chandurkar</strong> (Patient ID: #102)</p>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="showSection('patient-symptoms')">+ Book by Symptoms</button>
+            </div>
+
+            <!-- Symptom Checker Section -->
+            <div id="patient-symptoms" class="cb-card" style="background: linear-gradient(to right bottom, #ffffff, #F0FBFD);">
+                <div class="cb-card-header">
+                    <h3>1. Deterministic Symptom Triage & Doctor Recommendation</h3>
+                    <span id="selectedCount" class="badge bg-secondary">0 Symptoms Selected</span>
+                </div>
+                <p style="color: var(--color-muted); font-size: 0.88rem;">
+                    Select your symptoms below. The system executes a <strong>deterministic majority-voting algorithm</strong> against <code>tbl_SymptomMapping</code> to match the most appropriate medical specialist.
+                </p>
+
+                <input type="text" id="symptomSearch" class="form-control mb-3" placeholder="🔍 Search symptoms (e.g. 'chest pain', 'fever', 'joint pain', 'cough')..." oninput="filterSymptoms()">
+
+                <div class="symptom-grid" id="symptomList"></div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <button class="btn btn-cb-primary" onclick="runSymptomRecommendation()">Match Doctor & Recommend Specialist</button>
+                    <button class="btn btn-link text-muted btn-sm" onclick="clearSelectedSymptoms()">Clear Selection</button>
+                </div>
+
+                <!-- Recommendation Result Area -->
+                <div id="recommendationResult" class="mt-4" style="display: none; padding: 20px; background: #fff; border-radius: 12px; border: 1.5px solid var(--color-primary);">
+                    <h5 style="color: var(--color-primary-dark); font-weight: 700; margin-bottom: 6px;" id="recTitle"></h5>
+                    <p style="font-size: 0.88rem; color: var(--color-muted);" id="recDesc"></p>
+                    <div id="recommendedDoctorsList" class="row g-3 mt-2"></div>
+                </div>
+            </div>
+
+            <!-- Appointments & History -->
+            <div class="cb-card">
+                <div class="cb-card-header">
+                    <h3>My Scheduled Appointments</h3>
+                    <span class="text-muted" style="font-size: 0.8rem;">Live Outpatient State</span>
+                </div>
+                <table class="cb-table">
+                    <thead>
+                        <tr>
+                            <th>Appt ID</th>
+                            <th>Doctor</th>
+                            <th>Date & Time</th>
+                            <th>Symptoms / Reason</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientApptsTable"></tbody>
+                </table>
+            </div>
+
+            <!-- Electronic Prescriptions & Lab Reports -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="cb-card h-100">
+                        <div class="cb-card-header">
+                            <h3>My Digital Prescriptions</h3>
+                        </div>
+                        <div id="patientPrescriptionsList"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="cb-card h-100">
+                        <div class="cb-card-header">
+                            <h3>My Diagnostic Lab Reports</h3>
+                        </div>
+                        <div id="patientLabReportsList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= DOCTOR PORTAL ================= -->
+        <div id="view-doctor" class="cb-portal-view">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2>Doctor Consultation Portal</h2>
+                    <p style="color: var(--color-muted); margin: 0;">Practicing as: <strong>Dr. Anjali Mehta</strong> (Cardiologist, City General Hospital)</p>
+                </div>
+                <span class="badge bg-primary">Consulting Hours: 10:00 AM - 4:00 PM</span>
+            </div>
+
+            <!-- Outpatient Queue -->
+            <div class="cb-card">
+                <div class="cb-card-header">
+                    <h3>Outpatient Appointment Queue</h3>
+                    <span class="text-muted" style="font-size: 0.8rem;">Click 'Confirm' to accept or 'Prescribe' to finish visit</span>
+                </div>
+                <table class="cb-table">
+                    <thead>
+                        <tr>
+                            <th>Appt ID</th>
+                            <th>Patient Name</th>
+                            <th>Date/Time</th>
+                            <th>Symptoms</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="doctorApptsTable"></tbody>
+                </table>
+            </div>
+
+            <!-- Multi-Drug Prescription Pad Modal/Section -->
+            <div id="prescriptionSection" class="cb-card" style="display: none; border-color: var(--color-primary); background: #FAFDFE;">
+                <div class="cb-card-header">
+                    <h3>Electronic Prescription Pad (ViewState Simulation)</h3>
+                    <button class="btn-close" onclick="closePrescriptionSection()"></button>
+                </div>
+                <p style="color: var(--color-muted); font-size: 0.88rem;">
+                    Patient: <strong id="prescribingPatientName"></strong> (Appointment #<span id="prescribingApptId"></span>)
+                </p>
+
+                <div id="medicineRowsWrap"></div>
+
+                <div class="d-flex gap-2 my-3">
+                    <button class="btn btn-outline-secondary btn-sm" onclick="addMedicineRow()">+ Add Another Medicine</button>
+                    <button class="btn btn-outline-info btn-sm" onclick="orderLabTestPrompt()">🔬 Order Diagnostic Lab Test</button>
+                </div>
+
+                <div class="border-top pt-3 d-flex justify-content-end gap-2">
+                    <button class="btn btn-secondary btn-sm" onclick="closePrescriptionSection()">Cancel</button>
+                    <button class="btn btn-cb-primary btn-sm" onclick="commitPrescription()">Commit Prescription (Advances to Completed)</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= DIAGNOSTIC LAB PORTAL ================= -->
+        <div id="view-lab" class="cb-portal-view">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2>Diagnostic Laboratory Portal</h2>
+                    <p style="color: var(--color-muted); margin: 0;">Facility: <strong>City Diagnostic Pathology & Imaging Lab</strong></p>
+                </div>
+            </div>
+
+            <div class="cb-card">
+                <div class="cb-card-header">
+                    <h3>Incoming Diagnostic Investigation Orders</h3>
+                    <span class="text-muted" style="font-size: 0.8rem;">Pending & In-Progress Tests</span>
+                </div>
+                <table class="cb-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Patient</th>
+                            <th>Ordering Doctor</th>
+                            <th>Investigation Ordered</th>
+                            <th>State</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="labRequestsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- ================= MEDICAL STORE (PHARMACY) ================= -->
+        <div id="view-medicalstore" class="cb-portal-view">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2>Medical Store (Hospital Pharmacy)</h2>
+                    <p style="color: var(--color-muted); margin: 0;">Dispensing Pharmacy: <strong>City Medical Stores</strong></p>
+                </div>
+            </div>
+
+            <!-- Unbilled Prescription Queue -->
+            <div class="cb-card">
+                <div class="cb-card-header">
+                    <h3>Unbilled Prescription Queue</h3>
+                    <span class="badge bg-warning text-dark">Filtered via Correlated NOT EXISTS Subquery</span>
+                </div>
+                <p style="color: var(--color-muted); font-size: 0.85rem;">
+                    Prescriptions signed by doctors arrive here directly. Enter medicine prices to generate an itemized bill.
+                </p>
+                <div id="unbilledPrescriptionsList"></div>
+            </div>
+
+            <!-- Bill Invoice View Area -->
+            <div id="billingInvoiceArea" class="cb-card" style="display: none;">
+                <div class="cb-card-header">
+                    <h3>Customer Financial Invoice</h3>
+                    <button class="btn btn-sm btn-outline-primary" onclick="window.print()">🖨️ Print Bill (window.print)</button>
+                </div>
+                <div class="thermal-receipt" id="invoiceDetails"></div>
+            </div>
+        </div>
+
+
+        <!-- ================= HOSPITAL ADMIN PORTAL ================= -->
+        <div id="view-admin" class="cb-portal-view">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2>Hospital Executive Administration</h2>
+                    <p style="color: var(--color-muted); margin: 0;">Facility Profile: <strong>City General Hospital</strong></p>
+                </div>
+            </div>
+
+            <!-- Metric Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="cb-card text-center p-3">
+                        <h4 style="font-size: 1.8rem; color: var(--color-primary); font-weight: 800;" id="metricAppts">2</h4>
+                        <div style="font-size: 0.85rem; color: var(--color-muted);">Total Appointments</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cb-card text-center p-3">
+                        <h4 style="font-size: 1.8rem; color: var(--color-primary); font-weight: 800;">13</h4>
+                        <div style="font-size: 0.85rem; color: var(--color-muted);">Doctors Provisioned</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cb-card text-center p-3">
+                        <h4 style="font-size: 1.8rem; color: var(--color-primary); font-weight: 800;" id="metricRx">1</h4>
+                        <div style="font-size: 0.85rem; color: var(--color-muted);">Prescriptions Issued</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="cb-card text-center p-3">
+                        <h4 style="font-size: 1.8rem; color: var(--color-primary); font-weight: 800;" id="metricBills">0</h4>
+                        <div style="font-size: 0.85rem; color: var(--color-muted);">Invoices Billed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctors Directory -->
+            <div class="cb-card">
+                <div class="cb-card-header">
+                    <h3>Provisioned Medical Staff Directory</h3>
+                    <span class="text-muted" style="font-size: 0.8rem;">13 Medical Specializations</span>
+                </div>
+                <table class="cb-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor Name</th>
+                            <th>Specialization</th>
+                            <th>Available Days</th>
+                            <th>Consulting Hours</th>
+                            <th>Contact Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminDoctorsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Book Doctor Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Doctor: <strong id="modalDocName"></strong> (<span id="modalDocSpec"></span>)</p>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem;">Patient Name</label>
+                        <input type="text" id="modalPatientName" class="form-control" value="Swaraj Chandurkar">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem;">Appointment Date</label>
+                        <input type="date" id="modalDate" class="form-control" value="2026-11-20">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size: 0.85rem;">Preferred Time</label>
+                        <select id="modalTime" class="form-select">
+                            <option>10:00 AM</option>
+                            <option>11:30 AM</option>
+                            <option>02:00 PM</option>
+                            <option>04:30 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-cb-primary" onclick="confirmBooking()">Confirm & Enter Queue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        let selectedSymptoms = [];
+        let pendingBookingDoc = null;
+        let activePrescribingAppt = null;
+
+        // On Load
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check URL param for role
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialRole = urlParams.get("role") || "patient";
+            switchRole(initialRole);
+            renderSymptoms();
+            refreshAllViews();
+        });
+
+        function switchRole(roleName) {
+            document.querySelectorAll(".cb-portal-view").forEach(el => el.classList.remove("active"));
+            document.querySelectorAll(".role-pill").forEach(el => el.classList.remove("active"));
+
+            const target = document.getElementById("view-" + roleName);
+            if (target) target.classList.add("active");
+
+            document.querySelectorAll(".role-pill").forEach(el => {
+                if (el.getAttribute("onclick").includes("'" + roleName + "'")) {
+                    el.classList.add("active");
+                }
+            });
+
+            // Update URL without reloading
+            const url = new URL(window.location);
+            url.searchParams.set("role", roleName);
+            window.history.replaceState({}, '', url);
+
+            refreshAllViews();
+        }
+
+        // Render 42 Symptoms Checklist
+        function renderSymptoms() {
+            const list = document.getElementById("symptomList");
+            const map = CareBridge.getSymptomMap();
+            list.innerHTML = "";
+
+            Object.keys(map).forEach(s => {
+                const li = document.createElement("li");
+                li.className = "symptom-chip";
+                li.textContent = s.charAt(0).toUpperCase() + s.slice(1);
+                li.onclick = function () {
+                    toggleSymptom(s, li);
+                };
+                list.appendChild(li);
+            });
+        }
+
+        function filterSymptoms() {
+            const q = document.getElementById("symptomSearch").value.toLowerCase().trim();
+            document.querySelectorAll(".symptom-chip").forEach(chip => {
+                const txt = chip.textContent.toLowerCase();
+                chip.style.display = (txt.includes(q)) ? "inline-block" : "none";
+            });
+        }
+
+        function toggleSymptom(s, el) {
+            const idx = selectedSymptoms.indexOf(s);
+            if (idx > -1) {
+                selectedSymptoms.splice(idx, 1);
+                el.classList.remove("selected");
+            } else {
+                selectedSymptoms.push(s);
+                el.classList.add("selected");
+            }
+            document.getElementById("selectedCount").textContent = selectedSymptoms.length + " Selected";
+        }
+
+        function clearSelectedSymptoms() {
+            selectedSymptoms = [];
+            document.querySelectorAll(".symptom-chip").forEach(c => c.classList.remove("selected"));
+            document.getElementById("selectedCount").textContent = "0 Selected";
+            document.getElementById("recommendationResult").style.display = "none";
+        }
+
+        // Run Triage Algorithm
+        function runSymptomRecommendation() {
+            const spec = CareBridge.recommendSpecialization(selectedSymptoms);
+            const doctors = CareBridge.getDoctors().filter(d => d.specId === spec.id);
+
+            const res = document.getElementById("recommendationResult");
+            const title = document.getElementById("recTitle");
+            const desc = document.getElementById("recDesc");
+            const docsList = document.getElementById("recommendedDoctorsList");
+
+            title.textContent = "Recommended Specialization: " + spec.name;
+            desc.textContent = "Based on majority-voting count across your symptoms (" + (selectedSymptoms.join(", ") || "None") + "), our deterministic rules recommend consulting a " + spec.name + ".";
+
+            docsList.innerHTML = "";
+            doctors.forEach(d => {
+                const col = document.createElement("div");
+                col.className = "col-md-6";
+                col.innerHTML = `
+                    <div class="p-3 border rounded bg-light">
+                        <h6 class="mb-1 fw-bold text-dark">${d.name}</h6>
+                        <div class="text-muted small">${d.hospital} • ${d.days} (${d.time})</div>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="openBookingModal(${d.id})">Book Appointment</button>
+                    </div>
+                `;
+                docsList.appendChild(col);
+            });
+
+            res.style.display = "block";
+            res.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openBookingModal(doctorId) {
+            const doc = CareBridge.getDoctors().find(d => d.id == doctorId);
+            pendingBookingDoc = doc;
+            document.getElementById("modalDocName").textContent = doc.name;
+            document.getElementById("modalDocSpec").textContent = doc.specName;
+            
+            const modalEl = document.getElementById('bookingModal');
+            const myModal = new bootstrap.Modal(modalEl);
+            myModal.show();
+        }
+
+        function confirmBooking() {
+            const patientName = document.getElementById("modalPatientName").value;
+            const date = document.getElementById("modalDate").value;
+            const time = document.getElementById("modalTime").value;
+            const symptomsText = selectedSymptoms.join(", ") || "General checkup";
+
+            CareBridge.addAppointment(patientName, pendingBookingDoc.id, date, time, symptomsText);
+
+            const modalEl = document.getElementById('bookingModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) modalInstance.hide();
+
+            alert("Appointment Booked! Added to Doctor's Outpatient Queue with status 'Pending'.");
+            clearSelectedSymptoms();
+            refreshAllViews();
+        }
+
+        // Doctor Functions
+        function confirmApptByDoctor(id) {
+            CareBridge.confirmAppointment(id);
+            refreshAllViews();
+        }
+
+        function openPrescribeModal(id) {
+            const appts = CareBridge.getAppointments();
+            const appt = appts.find(a => a.id == id);
+            activePrescribingAppt = appt;
+
+            document.getElementById("prescribingPatientName").textContent = appt.patientName;
+            document.getElementById("prescribingApptId").textContent = appt.id;
+
+            const wrap = document.getElementById("medicineRowsWrap");
+            wrap.innerHTML = "";
+            addMedicineRow("Paracetamol 500mg", "1-0-1", "10", "After meals");
+
+            document.getElementById("prescriptionSection").style.display = "block";
+            document.getElementById("prescriptionSection").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function addMedicineRow(name = "", dosage = "1-0-1", qty = "10", instructions = "After food") {
+            const wrap = document.getElementById("medicineRowsWrap");
+            const div = document.createElement("div");
+            div.className = "row g-2 mb-2 med-item-row";
+            div.innerHTML = `
+                <div class="col-md-4"><input type="text" class="form-control form-control-sm med-name" placeholder="Medicine Name" value="${name}"></div>
+                <div class="col-md-2"><input type="text" class="form-control form-control-sm med-dosage" placeholder="Dosage (e.g. 1-0-1)" value="${dosage}"></div>
+                <div class="col-md-2"><input type="number" class="form-control form-control-sm med-qty" placeholder="Quantity" value="${qty}"></div>
+                <div class="col-md-3"><input type="text" class="form-control form-control-sm med-inst" placeholder="Instructions" value="${instructions}"></div>
+                <div class="col-md-1"><button class="btn btn-outline-danger btn-sm w-100" onclick="this.closest('.med-item-row').remove()">×</button></div>
+            `;
+            wrap.appendChild(div);
+        }
+
+        function closePrescriptionSection() {
+            document.getElementById("prescriptionSection").style.display = "none";
+        }
+
+        function orderLabTestPrompt() {
+            const test = prompt("Enter diagnostic test to order (e.g. 'CBC', 'Lipid Profile', 'ECG', 'Chest X-Ray'):", "Lipid Profile & ECG");
+            if (test && activePrescribingAppt) {
+                CareBridge.addLabRequest(activePrescribingAppt.id, test);
+                alert("Diagnostic Lab Test requisition dispatched to City Diagnostic Lab!");
+                refreshAllViews();
+            }
+        }
+
+        function commitPrescription() {
+            const rows = document.querySelectorAll(".med-item-row");
+            const items = [];
+            rows.forEach(r => {
+                const name = r.querySelector(".med-name").value.trim();
+                const dosage = r.querySelector(".med-dosage").value.trim();
+                const qty = r.querySelector(".med-qty").value.trim();
+                const instructions = r.querySelector(".med-inst").value.trim();
+                if (name) items.push({ name, dosage, qty, instructions });
+            });
+
+            if (items.length === 0) {
+                alert("Please add at least one medicine line.");
+                return;
+            }
+
+            CareBridge.addPrescription(activePrescribingAppt.id, items);
+            alert("Prescription Signed! Appointment status is now 'Completed' and prescription has been routed to the Medical Store unbilled queue.");
+            closePrescriptionSection();
+            refreshAllViews();
+        }
+
+        // Lab Functions
+        function startLabTest(id) {
+            CareBridge.startLabTest(id);
+            refreshAllViews();
+        }
+
+        function uploadReportSimulation(id) {
+            const fileName = "Validated_Diagnostic_Report_" + id + ".pdf";
+            CareBridge.uploadLabReport(id, fileName);
+            alert("Report " + fileName + " successfully uploaded! Test marked 'Completed' and is now accessible by the Patient.");
+            refreshAllViews();
+        }
+
+        // Pharmacy Functions
+        function billRx(rxId) {
+            const rx = CareBridge.getPrescriptions().find(r => r.id == rxId);
+            const prices = [];
+            rx.items.forEach(it => {
+                const p = prompt(`Enter unit price for ${it.name} (Qty: ${it.qty}):`, "30.00");
+                prices.push(parseFloat(p) || 30.0);
+            });
+
+            const bill = CareBridge.billPrescription(rxId, prices);
+            renderInvoice(bill);
+            refreshAllViews();
+        }
+
+        function renderInvoice(bill) {
+            const area = document.getElementById("billingInvoiceArea");
+            const details = document.getElementById("invoiceDetails");
+            
+            let itemsHtml = "";
+            bill.items.forEach(i => {
+                itemsHtml += `<div>${i.name.padEnd(20, ' ')} ${i.qty.toString().padStart(4, ' ')}  ₹${i.price.toFixed(2).padStart(7, ' ')}</div>`;
+            });
+
+            details.innerHTML = `
+                <div class="text-center fw-bold">CITY MEDICAL STORES</div>
+                <div class="text-center small">Rathi Nagar, Amravati, Maharashtra</div>
+                <div class="text-center small">Ph: 0721-2550123</div>
+                ----------------------------------------
+                <div>Bill No: #CB-${bill.id}       Date: ${bill.date}</div>
+                <div>Patient: ${bill.patientName}</div>
+                <div>Doctor : ${bill.doctorName}</div>
+                ----------------------------------------
+                <div>ITEM                 QTY    PRICE</div>
+                ----------------------------------------
+                ${itemsHtml}
+                ----------------------------------------
+                <div class="fw-bold">TOTAL AMOUNT PAID:       ₹${bill.totalAmount}</div>
+                ----------------------------------------
+                <div class="text-center small mt-2">*** COMPUTER GENERATED RECEIPT ***</div>
+                <div class="text-center small">Thank you for visiting CareBridge</div>
+            `;
+            area.style.display = "block";
+            area.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Refresh All Data Views
+        function refreshAllViews() {
+            const appts = CareBridge.getAppointments();
+            const rxs = CareBridge.getPrescriptions();
+            const labs = CareBridge.getLabRequests();
+            const bills = CareBridge.getBills();
+
+            // 1. Patient Appointments
+            const pTable = document.getElementById("patientApptsTable");
+            pTable.innerHTML = appts.map(a => `
+                <tr>
+                    <td><strong>#${a.id}</strong></td>
+                    <td>${a.doctorName}</td>
+                    <td>${a.date} (${a.time})</td>
+                    <td>${a.symptoms}</td>
+                    <td><span class="badge-${a.status.toLowerCase()}">${a.status}</span></td>
+                </tr>
+            `).join("");
+
+            // 2. Patient Prescriptions
+            const pRxList = document.getElementById("patientPrescriptionsList");
+            pRxList.innerHTML = rxs.length ? rxs.map(rx => `
+                <div class="p-3 mb-2 border rounded bg-light">
+                    <div class="d-flex justify-content-between">
+                        <strong>Prescription #${rx.id}</strong>
+                        <span class="text-muted small">${rx.date}</span>
+                    </div>
+                    <div class="small text-muted mb-2">Prescribed by ${rx.doctorName}</div>
+                    <ul class="mb-0 small ps-3">
+                        ${rx.items.map(it => `<li><strong>${it.name}</strong> - ${it.dosage} (${it.qty} units) • <em>${it.instructions}</em></li>`).join("")}
+                    </ul>
+                </div>
+            `).join("") : `<div class="text-muted small">No prescriptions issued yet.</div>`;
+
+            // 3. Patient Lab Reports
+            const pLabList = document.getElementById("patientLabReportsList");
+            pLabList.innerHTML = labs.length ? labs.map(l => `
+                <div class="p-3 mb-2 border rounded bg-light d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${l.testName}</strong>
+                        <div class="small text-muted">Ordered by ${l.doctorName}</div>
+                        <span class="badge-${l.status.toLowerCase().replace(" ", "")}">${l.status}</span>
+                    </div>
+                    ${l.reportUrl ? `<button class="btn btn-sm btn-outline-success" onclick="alert('Viewing PDF: ' + '${l.reportUrl}')">📥 View PDF</button>` : `<span class="text-muted small">Pending Test</span>`}
+                </div>
+            `).join("") : `<div class="text-muted small">No diagnostic lab reports requested yet.</div>`;
+
+            // 4. Doctor Outpatient Queue
+            const docTable = document.getElementById("doctorApptsTable");
+            docTable.innerHTML = appts.map(a => `
+                <tr>
+                    <td>#${a.id}</td>
+                    <td><strong>${a.patientName}</strong></td>
+                    <td>${a.date} (${a.time})</td>
+                    <td>${a.symptoms}</td>
+                    <td><span class="badge-${a.status.toLowerCase()}">${a.status}</span></td>
+                    <td>
+                        ${a.status === 'Pending' ? `<button class="btn-sm-action btn-sm-primary" onclick="confirmApptByDoctor(${a.id})">Confirm</button>` : ''}
+                        ${a.status === 'Confirmed' ? `<button class="btn-sm-action btn-sm-outline" onclick="openPrescribeModal(${a.id})">Prescribe & Conclude</button>` : ''}
+                        ${a.status === 'Completed' ? `<span class="text-success small fw-bold">✓ Concluded</span>` : ''}
+                    </td>
+                </tr>
+            `).join("");
+
+            // 5. Diagnostic Lab Orders
+            const labTable = document.getElementById("labRequestsTable");
+            labTable.innerHTML = labs.map(l => `
+                <tr>
+                    <td>#${l.id}</td>
+                    <td><strong>${l.patientName}</strong></td>
+                    <td>${l.doctorName}</td>
+                    <td>${l.testName}</td>
+                    <td><span class="badge-${l.status.toLowerCase().replace(" ", "")}">${l.status}</span></td>
+                    <td>
+                        ${l.status === 'Pending' ? `<button class="btn-sm-action btn-sm-primary" onclick="startLabTest(${l.id})">Start Test</button>` : ''}
+                        ${l.status === 'In Progress' ? `<button class="btn-sm-action btn-sm-outline" onclick="uploadReportSimulation(${l.id})">Upload PDF Report</button>` : ''}
+                        ${l.status === 'Completed' ? `<span class="text-success small fw-bold">✓ Report Delivered</span>` : ''}
+                    </td>
+                </tr>
+            `).join("");
+
+            // 6. Medical Store Unbilled Queue (WHERE NOT EXISTS)
+            const unbilled = rxs.filter(r => !r.billed);
+            const unbilledWrap = document.getElementById("unbilledPrescriptionsList");
+            unbilledWrap.innerHTML = unbilled.length ? unbilled.map(r => `
+                <div class="p-3 mb-2 border rounded bg-light d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1 fw-bold">Rx #${r.id} — Patient: ${r.patientName}</h6>
+                        <div class="small text-muted">Signed by ${r.doctorName} • ${r.items.length} Medicines Prescribed</div>
+                    </div>
+                    <button class="btn btn-sm btn-cb-primary" onclick="billRx(${r.id})">Price & Generate Bill</button>
+                </div>
+            `).join("") : `<div class="p-3 text-muted border rounded">No unbilled prescriptions in queue. All prescriptions are billed.</div>`;
+
+            // 7. Admin Metrics & Staff
+            document.getElementById("metricAppts").textContent = appts.length;
+            document.getElementById("metricRx").textContent = rxs.length;
+            document.getElementById("metricBills").textContent = bills.length;
+
+            const adminTable = document.getElementById("adminDoctorsTable");
+            adminTable.innerHTML = CareBridge.getDoctors().map(d => `
+                <tr>
+                    <td><strong>${d.name}</strong></td>
+                    <td><span class="badge bg-light text-dark border">${d.specName}</span></td>
+                    <td>${d.days}</td>
+                    <td>${d.time}</td>
+                    <td><a href="mailto:${d.email}" class="text-decoration-none">${d.email}</a></td>
+                </tr>
+            `).join("");
+        }
+
+        function resetDemo() {
+            if (confirm("Reset demo data to initial database state?")) {
+                CareBridge.resetDemoData();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

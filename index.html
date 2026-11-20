@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareBridge — Unified Healthcare Management Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #12AEC4;
+            --color-primary-dark: #0C93A6;
+            --color-primary-light: #E7F7F9;
+            --color-bg: #F7FAFB;
+            --color-surface: #FFFFFF;
+            --color-text: #263238;
+            --color-muted: #7C8D96;
+            --color-border: #E3EBEE;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); margin: 0; }
+        h1, h2, h3, h4, .navbar-brand { font-family: 'Poppins', sans-serif; }
+        .cb-topstrip { background: #0C93A6; color: #fff; font-size: 0.85rem; padding: 7px 15px; text-align: center; }
+        .cb-navbar { background: #fff; border-bottom: 1px solid var(--color-border); padding: 16px 0; }
+        .cb-navbar .navbar-brand { font-size: 1.5rem; font-weight: 700; color: #263238; text-decoration: none; }
+        .cb-navbar .navbar-brand span { color: var(--color-primary); }
+        .btn-cb-primary { background: var(--color-primary); color: #fff; border-radius: 8px; padding: 10px 22px; font-weight: 600; border: none; text-decoration: none; transition: 0.2s; display: inline-block; }
+        .btn-cb-primary:hover { background: var(--color-primary-dark); color: #fff; }
+        .btn-cb-outline { border: 1.5px solid var(--color-primary); color: var(--color-primary); border-radius: 8px; padding: 8px 18px; font-weight: 600; text-decoration: none; margin-right: 10px; display: inline-block; }
+        .btn-cb-outline:hover { background: var(--color-primary-light); }
+        .cb-hero-section { padding: 60px 0 40px; }
+        .cb-badge-pill { display: inline-block; background: var(--color-primary-light); color: var(--color-primary-dark); padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; margin-bottom: 16px; }
+        .cb-role-card { background: #fff; border: 1px solid var(--color-border); border-radius: 14px; padding: 24px; transition: 0.2s; height: 100%; box-shadow: var(--shadow-sm); }
+        .cb-role-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--color-primary); }
+        .cb-icon-box { width: 44px; height: 44px; border-radius: 10px; background: var(--color-primary-light); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--color-primary-dark); }
+        .cb-workflow-strip { background: #fff; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: 40px 0; margin: 40px 0; }
+        .cb-step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--color-primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="cb-topstrip">
+        CareBridge Healthcare Platform • 5 Connected Portals: Patient, Hospital, Doctor, Lab, and Pharmacy
+    </div>
+
+    <nav class="cb-navbar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="index.html">Care<span>Bridge</span></a>
+            <div>
+                <a class="btn-cb-outline" href="login.html">Log in</a>
+                <a class="btn-cb-primary" href="portal.html">Launch Live Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="cb-hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="cb-badge-pill">● Enterprise Cloud Healthcare Coordination</div>
+                    <h1 style="font-size: 2.5rem; line-height: 1.25; margin-bottom: 18px;">Healthcare that finally moves as one unified system.</h1>
+                    <p style="color: var(--color-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 28px;">
+                        CareBridge connects patients, hospital administrators, doctors, diagnostic labs, and medical stores into a single digital conduit. Clinical consultations, lab investigations, and pharmacy dispensing propagate in real time with zero paper hand-offs.
+                    </p>
+                    <div>
+                        <a href="portal.html?role=patient" class="btn-cb-primary me-2">Try Patient Symptom Checker</a>
+                        <a href="login.html" class="btn-cb-outline">Select Role Dashboard</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0 text-center">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" alt="Hospital Network" style="width: 100%; border-radius: 16px; box-shadow: var(--shadow-md);">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="cb-workflow-strip">
+        <div class="container">
+            <h2 class="text-center mb-2" style="font-size: 1.8rem;">How the Complete Care Episode Executes</h2>
+            <p class="text-center text-muted mb-5">From first symptom entry to medicine dispensing in approximately 25 minutes</p>
+
+            <div class="row text-center g-3">
+                <div class="col-md-2 col-6">
+                    <div class="cb-step-num">1</div>
+                    <h5 style="font-size: 0.95rem;">Symptom Entry</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-muted);">42-symptom checklist with live search</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="cb-step-num">2</div>
+                    <h5 style="font-size: 0.95rem;">Doctor Match</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-muted);">Deterministic majority-voting algorithm</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="cb-step-num">3</div>
+                    <h5 style="font-size: 0.95rem;">Online Booking</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-muted);">Direct entry into Doctor queue as 'Pending'</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="cb-step-num">4</div>
+                    <h5 style="font-size: 0.95rem;">Consultation</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-muted);">Doctor confirms visit & authors digital prescription</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="cb-step-num">5</div>
+                    <h5 style="font-size: 0.95rem;">Lab Order & PDF</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-muted);">Diagnostic Lab tests and uploads PDF report</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="cb-step-num">6</div>
+                    <h5 style="font-size: 0.95rem;">Pharmacy Billing</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-muted);">Unbilled queue pulls prescription and prints invoice</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container py-4">
+        <h2 class="mb-4" style="font-size: 1.8rem;">Explore the 5 Connected Roles</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="cb-role-card">
+                    <div class="cb-icon-box">👤</div>
+                    <h4>Patient Portal</h4>
+                    <p style="color: var(--color-muted); font-size: 0.88rem;">Select symptoms, get matched to specialists, book appointments, and view electronic prescriptions and lab reports.</p>
+                    <a href="portal.html?role=patient" class="btn-cb-outline w-100 text-center">Open Patient View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cb-role-card">
+                    <div class="cb-icon-box">👨‍⚕️</div>
+                    <h4>Doctor Portal</h4>
+                    <p style="color: var(--color-muted); font-size: 0.88rem;">Manage outpatient queue, confirm appointments, assemble multi-item prescriptions, and order diagnostic lab tests.</p>
+                    <a href="portal.html?role=doctor" class="btn-cb-outline w-100 text-center">Open Doctor View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cb-role-card">
+                    <div class="cb-icon-box">🔬</div>
+                    <h4>Diagnostic Lab Portal</h4>
+                    <p style="color: var(--color-muted); font-size: 0.88rem;">Process incoming investigation requisitions, update test processing states, and upload validated electronic PDF reports.</p>
+                    <a href="portal.html?role=lab" class="btn-cb-outline w-100 text-center">Open Lab View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cb-role-card">
+                    <div class="cb-icon-box">💊</div>
+                    <h4>Medical Store (Pharmacy)</h4>
+                    <p style="color: var(--color-muted); font-size: 0.88rem;">Ingest unbilled prescriptions directly from consultation rooms, price pharmaceutical lines, and issue printed bills.</p>
+                    <a href="portal.html?role=medicalstore" class="btn-cb-outline w-100 text-center">Open Pharmacy View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cb-role-card">
+                    <div class="cb-icon-box">🏥</div>
+                    <h4>Hospital Admin Portal</h4>
+                    <p style="color: var(--color-muted); font-size: 0.88rem;">Provision credentials for doctors, laboratories, and pharmacies with relational data integrity, and inspect aggregate reports.</p>
+                    <a href="portal.html?role=admin" class="btn-cb-outline w-100 text-center">Open Admin View</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="cb-role-card" style="background: var(--color-primary-light); border-color: var(--color-primary);">
+                    <div class="cb-icon-box" style="background: #fff;">⚡</div>
+                    <h4>Live Interactive Showcase</h4>
+                    <p style="color: var(--color-primary-dark); font-size: 0.88rem;">Test the end-to-end synchronized workflow in real time with preloaded test data from our database schema.</p>
+                    <a href="portal.html" class="btn-cb-primary w-100 text-center">Launch Master Portal</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-4 text-center mt-5" style="border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 0.85rem;">
+        CareBridge • Unified Healthcare Management System • Department of Computer Science & Engineering
+    </footer>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

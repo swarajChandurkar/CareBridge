@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in — CareBridge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/site.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #12AEC4;
+            --color-primary-dark: #0C93A6;
+            --color-primary-light: #E7F7F9;
+            --color-bg: #F7FAFB;
+            --color-text: #263238;
+            --color-muted: #7C8D96;
+            --color-border: #E3EBEE;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--color-bg); margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        .cb-auth-wrap { display: flex; flex: 1; min-height: 100vh; }
+        .cb-auth-brand { flex: 1; background: linear-gradient(135deg, rgba(18,174,196,0.92), rgba(12,147,166,0.96)), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=80') center/cover; color: #fff; padding: 60px; display: flex; flex-direction: column; justify-content: center; }
+        .cb-auth-form { width: 480px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 40px; }
+        .cb-card { width: 100%; }
+        .btn-cb-primary { background: var(--color-primary); color: #fff; border: none; border-radius: 8px; padding: 12px; font-weight: 600; width: 100%; transition: 0.2s; }
+        .btn-cb-primary:hover { background: var(--color-primary-dark); }
+        .demo-chip { display: inline-block; padding: 6px 12px; margin: 4px; font-size: 0.8rem; font-weight: 600; border-radius: 20px; border: 1.5px solid var(--color-border); background: #fff; color: var(--color-text); text-decoration: none; cursor: pointer; transition: 0.15s; }
+        .demo-chip:hover { border-color: var(--color-primary); background: var(--color-primary-light); color: var(--color-primary-dark); }
+        @media(max-width: 850px) {
+            .cb-auth-wrap { flex-direction: column; }
+            .cb-auth-brand { padding: 40px 20px; }
+            .cb-auth-form { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cb-auth-wrap">
+        <div class="cb-auth-brand">
+            <a href="index.html" style="color: #fff; text-decoration: none; font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; display: inline-block;">Care<span style="color:#b2ebf2;">Bridge</span></a>
+            <div style="background: rgba(255,255,255,0.2); width: fit-content; padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px;">● 5 Roles • 1 Unified System</div>
+            <h1 style="font-size: 2.3rem; margin-bottom: 16px;">Welcome back.</h1>
+            <p style="font-size: 1.05rem; opacity: 0.9; line-height: 1.6; max-width: 480px;">Log in to access your role dashboard—whether you are a patient checking lab results, a doctor prescribing medicines, or a pharmacy billing prescriptions.</p>
+        </div>
+
+        <div class="cb-auth-form">
+            <div class="cb-card">
+                <h3 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 6px;">Sign in</h3>
+                <p style="color: var(--color-muted); font-size: 0.88rem; margin-bottom: 24px;">Enter your credentials or choose a quick demo account.</p>
+
+                <div class="mb-4" style="background: var(--color-primary-light); padding: 14px; border-radius: 12px; border: 1px solid rgba(18,174,196,0.2);">
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 6px; text-transform: uppercase;">Quick 1-Click Demo Login</div>
+                    <div>
+                        <a href="portal.html?role=patient" class="demo-chip">👤 Patient (Swaraj)</a>
+                        <a href="portal.html?role=doctor" class="demo-chip">👨‍⚕️ Doctor (Dr. Sharma)</a>
+                        <a href="portal.html?role=lab" class="demo-chip">🔬 Lab (CityLab)</a>
+                        <a href="portal.html?role=medicalstore" class="demo-chip">💊 Medical Store</a>
+                        <a href="portal.html?role=admin" class="demo-chip">🏥 Hospital Admin</a>
+                    </div>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="mb-3">
+                        <label style="font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; display: block;">Username</label>
+                        <input type="text" id="username" class="form-control" style="padding: 10px 14px; border-radius: 8px;" placeholder="e.g. swaraj@123 or dr.sharma" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label style="font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; display: block;">Password</label>
+                        <input type="password" id="password" class="form-control" style="padding: 10px 14px; border-radius: 8px;" placeholder="••••••••" required>
+                    </div>
+
+                    <div id="loginMsg" style="color: #d32f2f; font-size: 0.85rem; margin-bottom: 12px; display: none;"></div>
+
+                    <button type="submit" class="btn-cb-primary">Log in to CareBridge</button>
+                </form>
+
+                <div class="text-center mt-4" style="font-size: 0.85rem; color: var(--color-muted);">
+                    Don't have an account? <a href="register.html" style="color: var(--color-primary-dark); font-weight: 600; text-decoration: none;">Register here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById("username").value.trim().toLowerCase();
+            const p = document.getElementById("password").value.trim();
+            const msg = document.getElementById("loginMsg");
+
+            // Seed user mappings from CareBridge.txt
+            if (u.includes("dr.") || u === "doctor") {
+                window.location.href = "portal.html?role=doctor";
+            } else if (u.includes("lab") || u === "citylab") {
+                window.location.href = "portal.html?role=lab";
+            } else if (u.includes("medical") || u === "pharmacy" || u === "citymedical") {
+                window.location.href = "portal.html?role=medicalstore";
+            } else if (u.includes("admin") || u.includes("general") || u === "citygeneral") {
+                window.location.href = "portal.html?role=admin";
+            } else {
+                window.location.href = "portal.html?role=patient";
+            }
+        }
+    </script>
+</body>
+</html>
